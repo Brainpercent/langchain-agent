@@ -1,8 +1,11 @@
 [build]
 builder = "nixpacks"
 
+[build.nixpacks]
+workingDirectory = "frontend"
+
 [deploy]
-startCommand = "cd frontend && npm start"
+startCommand = "npm start"
 healthcheckPath = "/"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure" 

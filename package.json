@@ -3,11 +3,9 @@
   "version": "1.0.0",
   "description": "AI Research Assistant with LangGraph Backend and Next.js Frontend",
   "scripts": {
-    "install:frontend": "cd frontend && npm install --production=false",
-    "build": "cd frontend && npm ci --production=false && npm run build",
-    "start": "cd frontend && npm start",
-    "dev": "cd frontend && npm run dev",
-    "postinstall": "npm run install:frontend"
+    "build": "npm ci && npm run build",
+    "start": "npm start",
+    "dev": "npm run dev"
   },
   "engines": {
     "node": ">=18.0.0"

@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const path = require('path')
+
 const nextConfig = {
   // Enable standalone output for Docker
   output: 'standalone',
@@ -17,8 +19,17 @@ const nextConfig = {
     unoptimized: true, // Better for containerized environments
   },
 
-  // Webpack configuration for better bundling
+  // Webpack configuration for better bundling and path resolution
   webpack: (config, { isServer }) => {
+    // Add path aliases
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname, 'src'),
+      '@/components': path.resolve(__dirname, 'src/components'),
+      '@/lib': path.resolve(__dirname, 'src/lib'),
+      '@/types': path.resolve(__dirname, 'src/types'),
+    }
+
     // Optimize for production builds
     if (!isServer) {
       config.resolve.fallback = {

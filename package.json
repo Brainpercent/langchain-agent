@@ -1,0 +1,14 @@
+{
+  "name": "langchain-agent",
+  "version": "1.0.0",
+  "scripts": {
+    "install": "cd frontend && npm ci",
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm start",
+    "dev": "cd frontend && npm run dev"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+} 

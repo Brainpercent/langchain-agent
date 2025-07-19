@@ -2,7 +2,7 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "node start-server.js"
+startCommand = "cd frontend && PORT=8080 HOSTNAME=0.0.0.0 npm start"
 healthcheckPath = "/"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"

@@ -1,7 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react'
-import { getCurrentUser, signIn, signUp, signOut, supabase, User, AuthState } from '../../lib/auth'
+import { getCurrentUser, signIn, signUp, signOut, supabase, User, AuthState } from '../../lib'
 
 interface AuthContextType extends AuthState {
   signIn: (email: string, password: string) => Promise<{ user: User | null, error?: string }>

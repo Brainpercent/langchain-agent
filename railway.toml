@@ -8,4 +8,7 @@ healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 
 [build.nixpacks]
-workingDirectory = "frontend" 
+workingDirectory = "frontend"
+
+[build.nixpacks.env]
+NPM_CONFIG_PRODUCTION = "false" 

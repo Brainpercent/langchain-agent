@@ -299,9 +299,8 @@ frontend/
 **🔧 Deployment Files Created:**
 - `frontend/Dockerfile` - Production-ready container ✅
 - `docker-compose.yml` - Full stack deployment ✅
-- `frontend/env.example` - Environment template ✅
 - `frontend/next.config.js` - Docker-optimized config ✅
-- `frontend/start-dev.ps1` - One-click startup script ✅
+- `frontend/start-dev.ps1` - Secure startup script (reads from .env) ✅
 - `frontend/README-AI-Assistant.md` - Complete documentation ✅
 
 **🚢 DEPLOYMENT COMMANDS:**
@@ -320,6 +319,15 @@ npm run dev
 docker-compose up --build
 
 # Access at http://localhost:3000
+```
+
+**🔐 UPDATED SUPABASE CREDENTIALS:**
+Supabase has updated to new API key format. Update your .env file:
+```
+NEXT_PUBLIC_SUPABASE_URL=https://pmschnwcszmwaljxzmgr.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_2UpeYuhWRq7wLqYlsl3p3Q_nS3g-2Wh
+NEXT_PUBLIC_LANGGRAPH_API_URL=http://localhost:2024
+NEXT_PUBLIC_ASSISTANT_ID=Deep Researcher
 ```
 
 **🎯 CURRENT STATUS: 90% COMPLETE!**

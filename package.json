@@ -1,8 +1,0 @@
-{
-  "name": "ai-research-assistant",
-  "version": "1.0.0",
-  "description": "AI Research Assistant with LangGraph Backend and Next.js Frontend",
-  "engines": {
-    "node": ">=18.0.0"
-  }
-}

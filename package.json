@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "debug": "node debug_build.js",
+    "clean": "cd frontend && rm -rf .next node_modules/.cache",
     "install": "cd frontend && npm ci",
     "build": "npm run debug && cd frontend && npm run build",
     "start": "cd frontend && npm start",

@@ -1,7 +1,7 @@
-import { Message as MessageType } from '@/types/chat'
-import { formatTimestamp, cn } from '@/lib/utils'
-import { UserIcon, ComputerDesktopIcon } from '@heroicons/react/24/solid'
+import { formatTimestamp, cn } from '../../lib/utils'
+import { Message as MessageType } from '../../types/chat'
 import ReactMarkdown from 'react-markdown'
+import { UserIcon, ComputerDesktopIcon } from '@heroicons/react/24/solid'
 
 interface MessageProps {
   message: MessageType

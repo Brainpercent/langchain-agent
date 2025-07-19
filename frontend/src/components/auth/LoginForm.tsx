@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useAuth } from './AuthProvider'
-import { cn } from '@/lib/utils'
+import { cn } from '../../lib/utils'
 
 export function LoginForm() {
   const [email, setEmail] = useState('')

@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Message } from './Message'
-import { Message as MessageType } from '@/types/chat'
+import { Message as MessageType } from '../../types/chat'
 
 interface MessageListProps {
   messages: MessageType[]

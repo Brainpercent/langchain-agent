@@ -28,11 +28,6 @@ const nextConfig = {
     return config;
   },
   
-  // Disable telemetry
-  telemetry: {
-    enabled: false
-  },
-  
   // Image optimization
   images: {
     unoptimized: true // Better for containerized environments

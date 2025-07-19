@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
-import { MessageList } from './MessageList'
+import React, { useState, useRef, useEffect } from 'react'
 import { ChatInput } from './ChatInput'
-import { Message, ChatState } from '@/types/chat'
-import { langGraphAPI, LangGraphMessage } from '@/lib/api'
-import { useAuth } from '@/components/auth/AuthProvider'
-import { LoginForm } from '@/components/auth/LoginForm'
+import { MessageList } from './MessageList'
+import { Message, ChatState } from '../../types/chat'
+import { langGraphAPI, LangGraphMessage } from '../../lib/api'
+import { useAuth } from '../auth/AuthProvider'
+import { LoginForm } from '../auth/LoginForm'
 import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline'
 
 export function ChatContainer() {

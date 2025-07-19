@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, KeyboardEvent } from 'react'
+import React, { useState, KeyboardEvent } from 'react'
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
-import { cn } from '@/lib/utils'
+import { cn } from '../../lib/utils'
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void

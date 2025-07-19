@@ -53,30 +53,32 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     getInitialSession()
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
-          setAuthState({
-            user: {
-              id: session.user.id,
-              email: session.user.email,
-              access_token: session.access_token
-            },
-            loading: false,
-            error: undefined
-          })
-        } else if (event === 'SIGNED_OUT') {
-          setAuthState({
-            user: null,
-            loading: false,
-            error: undefined
-          })
+    // Listen for auth changes only if supabase is available
+    if (supabase) {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        async (event, session) => {
+          if (event === 'SIGNED_IN' && session) {
+            setAuthState({
+              user: {
+                id: session.user.id,
+                email: session.user.email,
+                access_token: session.access_token
+              },
+              loading: false,
+              error: undefined
+            })
+          } else if (event === 'SIGNED_OUT') {
+            setAuthState({
+              user: null,
+              loading: false,
+              error: undefined
+            })
+          }
         }
-      }
-    )
+      )
 
-    return () => subscription.unsubscribe()
+      return () => subscription.unsubscribe()
+    }
   }, [])
 
   const handleSignIn = async (email: string, password: string) => {

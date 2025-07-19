@@ -1,11 +1,13 @@
 import { createClient } from '@supabase/supabase-js'
 
 // Configuration from environment variables
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-// Create Supabase client
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Create Supabase client only if environment variables are available
+export const supabase = supabaseUrl && supabaseAnonKey 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null
 
 export interface User {
   id: string
@@ -21,6 +23,11 @@ export interface AuthState {
 
 // Get current user session
 export async function getCurrentUser(): Promise<User | null> {
+  if (!supabase) {
+    console.warn('Supabase not initialized - missing environment variables')
+    return null
+  }
+
   try {
     const { data: { session }, error } = await supabase.auth.getSession()
     
@@ -46,6 +53,10 @@ export async function getCurrentUser(): Promise<User | null> {
 
 // Sign in with email and password
 export async function signIn(email: string, password: string): Promise<{ user: User | null, error?: string }> {
+  if (!supabase) {
+    return { user: null, error: 'Supabase not initialized' }
+  }
+
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -77,6 +88,10 @@ export async function signIn(email: string, password: string): Promise<{ user: U
 
 // Sign up with email and password
 export async function signUp(email: string, password: string): Promise<{ user: User | null, error?: string }> {
+  if (!supabase) {
+    return { user: null, error: 'Supabase not initialized' }
+  }
+
   try {
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -108,6 +123,10 @@ export async function signUp(email: string, password: string): Promise<{ user: U
 
 // Sign out
 export async function signOut(): Promise<{ error?: string }> {
+  if (!supabase) {
+    return { error: 'Supabase not initialized' }
+  }
+
   try {
     const { error } = await supabase.auth.signOut()
     
@@ -125,6 +144,11 @@ export async function signOut(): Promise<{ error?: string }> {
 
 // Get access token for API calls
 export async function getAccessToken(): Promise<string | null> {
+  if (!supabase) {
+    console.warn('Supabase not initialized - cannot get access token')
+    return null
+  }
+
   try {
     const { data: { session } } = await supabase.auth.getSession()
     return session?.access_token || null

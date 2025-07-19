@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "AI Research Assistant with LangGraph Backend and Next.js Frontend",
   "scripts": {
-    "build": "npm ci && npm run build",
+    "build": "npm install --no-optional && npm run build",
     "start": "npm start",
     "dev": "npm run dev"
   },

@@ -6,7 +6,7 @@
     "clean": "cd frontend && rm -rf .next node_modules/.cache",
     "install": "cd frontend && npm ci",
     "build": "npm run debug && cd frontend && npm run build",
-    "start": "cd frontend && node .next/standalone/server.js",
+    "start": "node start-server.js",
     "dev": "cd frontend && npm run dev"
   },
   "engines": {

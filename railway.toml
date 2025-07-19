@@ -2,10 +2,11 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "node frontend/.next/standalone/server.js"
+startCommand = "node start-server.js"
 healthcheckPath = "/"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 
 [variables]
-PORT = "3000" 
+PORT = "8080"
+HOSTNAME = "0.0.0.0" 

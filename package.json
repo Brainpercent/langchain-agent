@@ -2,11 +2,6 @@
   "name": "ai-research-assistant",
   "version": "1.0.0",
   "description": "AI Research Assistant with LangGraph Backend and Next.js Frontend",
-  "scripts": {
-    "build": "npm install --no-optional && npm run build",
-    "start": "npm start",
-    "dev": "npm run dev"
-  },
   "engines": {
     "node": ">=18.0.0"
   }

@@ -30,7 +30,7 @@ export function LoginForm() {
       if (result.error) {
         setLocalError(result.error)
       }
-    } catch (err) {
+    } catch {
       setLocalError('An unexpected error occurred')
     }
   }

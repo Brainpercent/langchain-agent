@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState } from 'react'
 import { ChatInput } from './ChatInput'
 import { MessageList } from './MessageList'
 import { Message, ChatState } from '../../types/chat'

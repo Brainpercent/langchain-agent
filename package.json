@@ -1,5 +1,15 @@
 {
-  "dependencies": {
-    "@supabase/supabase-js": "^2.52.0"
+  "name": "ai-research-assistant",
+  "version": "1.0.0",
+  "description": "AI Research Assistant with LangGraph Backend and Next.js Frontend",
+  "scripts": {
+    "install:frontend": "cd frontend && npm install",
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm start",
+    "dev": "cd frontend && npm run dev",
+    "postinstall": "npm run install:frontend"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

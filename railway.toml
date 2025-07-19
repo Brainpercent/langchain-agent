@@ -12,4 +12,5 @@ workingDirectory = "frontend"
 
 [build.nixpacks.env]
 NPM_CONFIG_PRODUCTION = "false"
-NPM_CONFIG_CACHE = "/tmp/.npm" 
+NPM_CONFIG_CACHE = "/tmp/.npm"
+PORT = "3000" 

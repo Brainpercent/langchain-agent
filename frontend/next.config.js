@@ -2,8 +2,13 @@
 const path = require('path')
 
 const nextConfig = {
-  // Enable standalone output for Docker
+  // Enable standalone output for Docker/Railway
   output: 'standalone',
+  
+  // Ensure proper port binding
+  experimental: {
+    outputFileTracingRoot: path.join(__dirname, '../'),
+  },
   
   // Environment variables that should be available at build time
   env: {

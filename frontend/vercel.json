@@ -4,6 +4,11 @@
   "framework": "nextjs",
   "installCommand": "npm install",
   "outputDirectory": ".next",
+  "functions": {
+    "pages/api/*.py": {
+      "runtime": "python3.9"
+    }
+  },
   "env": {
     "NEXT_PUBLIC_SUPABASE_URL": "https://pmschnwcszmwaljxzmgr.supabase.co",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY": "placeholder-key",

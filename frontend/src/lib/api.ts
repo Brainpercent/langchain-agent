@@ -9,7 +9,7 @@ export interface StreamChunk {
   content: string
 }
 
-class LangGraphAPI {
+export class LangGraphAPI {
   private baseUrl: string
   private assistantId: string
 

@@ -4,21 +4,15 @@
   "regions": ["iad1"],
   "functions": {
     "api/langgraph.py": {
-      "runtime": "python3.9",
-      "maxDuration": 300
+      "runtime": "python3.9"
     }
-  },
-  "env": {
-    "OPENAI_API_KEY": "@openai-api-key",
-    "TAVILY_API_KEY": "@tavily-api-key",
-    "ANTHROPIC_API_KEY": "@anthropic-api-key"
   },
   "build": {
     "env": {
       "PYTHON_VERSION": "3.9"
     }
   },
-  "installCommand": "npm install && pip install -r requirements-vercel.txt",
+  "installCommand": "npm install",
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "outputDirectory": ".next",

@@ -15,9 +15,17 @@ export class LangGraphAPI {
 
   constructor() {
     // Use same origin for API calls to avoid CORS issues
-    this.baseUrl = process.env.NODE_ENV === 'production' 
-      ? window.location.origin 
-      : 'http://localhost:3000'
+    // Check if window is available (client-side) to avoid SSR issues
+    if (typeof window !== 'undefined') {
+      this.baseUrl = process.env.NODE_ENV === 'production' 
+        ? window.location.origin 
+        : 'http://localhost:3000'
+    } else {
+      // Server-side fallback
+      this.baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL 
+        ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+        : 'http://localhost:3000'
+    }
     this.assistantId = process.env.NEXT_PUBLIC_ASSISTANT_ID || 'deep_researcher'
   }
 

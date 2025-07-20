@@ -5,18 +5,38 @@
       "use": "@vercel/next"
     },
     {
-      "src": "api/chat.py",
+      "src": "api/v1/chat.py",
       "use": "@vercel/python"
     },
     {
-      "src": "api/runs/stream.py",
+      "src": "api/webhooks/whatsapp.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "api/webhooks/telegram.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "api/webhooks/incoming.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
-      "src": "/api/runs/stream",
-      "dest": "/api/runs/stream"
+      "src": "/api/v1/chat",
+      "dest": "/api/v1/chat"
+    },
+    {
+      "src": "/api/webhooks/whatsapp",
+      "dest": "/api/webhooks/whatsapp"
+    },
+    {
+      "src": "/api/webhooks/telegram",
+      "dest": "/api/webhooks/telegram"
+    },
+    {
+      "src": "/api/webhooks/incoming",
+      "dest": "/api/webhooks/incoming"
     },
     {
       "src": "/api/(.*)",

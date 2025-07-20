@@ -6,13 +6,6 @@
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "outputDirectory": ".next",
-  "redirects": [
-    {
-      "source": "/api/chat",
-      "destination": "/api/chat.js",
-      "permanent": true
-    }
-  ],
   "headers": [
     {
       "source": "/api/(.*)",

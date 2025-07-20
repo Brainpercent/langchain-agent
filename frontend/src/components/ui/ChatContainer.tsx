@@ -1,37 +1,35 @@
 'use client'
 
-import React, { useState } from 'react'
-import { ChatInput } from './ChatInput'
-import { MessageList } from './MessageList'
-import { Message, ChatState } from '../../types/chat'
-import { langGraphAPI, LangGraphMessage } from '../../lib/api'
+import { useState } from 'react'
 import { useAuth } from '../auth/AuthProvider'
-import { LoginForm } from '../auth/LoginForm'
-import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline'
+import { MessageList } from './MessageList'
+import { ChatInput } from './ChatInput'
+import { LangGraphAPI, LangGraphMessage } from '../../lib/api'
+
+export interface Message {
+  id: string
+  content: string
+  role: 'user' | 'assistant'
+  timestamp: Date
+  status: 'sending' | 'streaming' | 'completed' | 'error'
+}
+
+interface ChatState {
+  messages: Message[]
+  isLoading: boolean
+  streamingMessageId: string | null
+}
 
 export function ChatContainer() {
-  const { user, loading: authLoading, signOut } = useAuth()
+  const { user, signOut } = useAuth()
+  
   const [chatState, setChatState] = useState<ChatState>({
     messages: [],
     isLoading: false,
+    streamingMessageId: null
   })
 
-  // Show loading spinner while checking auth
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Show login form if user is not authenticated
-  if (!user) {
-    return <LoginForm />
-  }
+  const langGraphAPI = new LangGraphAPI()
 
   const handleSendMessage = async (content: string) => {
     // Create user message
@@ -82,32 +80,17 @@ export function ChatContainer() {
       
       // Stream the response
       let fullContent = ''
-      for await (const chunk of langGraphAPI.streamResponse(response)) {
-        console.log('📦 Received chunk:', chunk)
-        
-        // Check if this is a replacement marker
-        if (chunk.startsWith('__REPLACE__')) {
-          // Replace the entire content with the new response
-          fullContent = chunk.substring(11) // Remove __REPLACE__ prefix
-          console.log('🔄 Replacing content with:', fullContent)
-        } else {
-          // Regular incremental content
-          fullContent += chunk
-        }
-        
-        console.log('📝 Full content so far:', fullContent)
-        
+      await langGraphAPI.streamResponse(response, (chunk) => {
+        fullContent += chunk
         setChatState(prev => ({
           ...prev,
           messages: prev.messages.map(msg => 
             msg.id === assistantMessageId 
-              ? { ...msg, content: fullContent, status: 'streaming' }
+              ? { ...msg, content: fullContent }
               : msg
           )
         }))
-      }
-
-      console.log('🏁 Stream completed. Final content:', fullContent)
+      })
 
       // Mark as completed
       setChatState(prev => ({
@@ -117,91 +100,72 @@ export function ChatContainer() {
             ? { ...msg, status: 'completed' }
             : msg
         ),
-        streamingMessageId: undefined
+        streamingMessageId: null
       }))
 
     } catch (error) {
       console.error('❌ Error in chat:', error)
       
+      // Update assistant message to show error
       setChatState(prev => ({
         ...prev,
+        messages: prev.messages.map(msg => 
+          msg.id === prev.streamingMessageId 
+            ? { 
+                ...msg, 
+                content: '❌ I encountered an error while processing your request. Please ensure the API is properly configured and try again.',
+                status: 'error'
+              }
+            : msg
+        ),
         isLoading: false,
-        streamingMessageId: undefined,
-        error: error instanceof Error ? error.message : 'Failed to send message. Please try again.'
+        streamingMessageId: null
       }))
-
-      // If there's a streaming message, mark it as error
-      if (chatState.streamingMessageId) {
-        setChatState(prev => ({
-          ...prev,
-          messages: prev.messages.map(msg => 
-            msg.id === chatState.streamingMessageId 
-              ? { ...msg, status: 'error', content: 'Failed to get response' }
-              : msg
-          )
-        }))
-      }
     }
   }
 
-  const clearError = () => {
-    setChatState(prev => ({ ...prev, error: undefined }))
-  }
-
-  const handleSignOut = async () => {
-    await signOut()
-    // Clear chat state when signing out
-    setChatState({
-      messages: [],
-      isLoading: false,
-    })
+  if (!user) {
+    return null
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className="flex flex-col h-full bg-white">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-        <div>
-          <h1 className="text-xl font-semibold text-gray-900">
-            AI Research Assistant
-          </h1>
-          <p className="text-sm text-gray-600">
-            Welcome back, {user.email}
-          </p>
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-gray-900">Research Chat</h1>
+            <p className="text-sm text-gray-500">Ask me anything and I'll research it for you</p>
+          </div>
+          <div className="flex items-center space-x-3">
+            <div className="text-sm text-gray-500">
+              Connected as {user.email}
+            </div>
+          </div>
         </div>
-        <button
-          onClick={handleSignOut}
-          className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
-        >
-          <ArrowRightOnRectangleIcon className="w-4 h-4" />
-          Sign Out
-        </button>
       </div>
 
-      {/* Messages */}
-      <MessageList 
-        messages={chatState.messages} 
-        isLoading={chatState.isLoading}
-      />
-
-      {/* Error Display */}
-      {chatState.error && (
-        <div className="bg-red-50 border-t border-red-200 px-6 py-3 flex justify-between items-center">
-          <p className="text-sm text-red-600">{chatState.error}</p>
-          <button 
-            onClick={clearError}
-            className="text-red-600 hover:text-red-800 text-sm font-medium"
-          >
-            Dismiss
-          </button>
+      {/* Chat Content */}
+      <div className="flex-1 flex flex-col min-h-0">
+        <div className="flex-1 overflow-hidden">
+          <MessageList 
+            messages={chatState.messages} 
+            isLoading={chatState.isLoading}
+            streamingMessageId={chatState.streamingMessageId}
+          />
         </div>
-      )}
-
-      {/* Input */}
-      <ChatInput 
-        onSendMessage={handleSendMessage}
-        disabled={chatState.isLoading || !!chatState.streamingMessageId}
-      />
+        
+        {/* Input Area */}
+        <div className="border-t border-gray-200 bg-white">
+          <div className="p-4">
+            <ChatInput 
+              onSendMessage={handleSendMessage}
+              disabled={chatState.isLoading || !!chatState.streamingMessageId}
+              placeholder="Ask a research question..."
+            />
+          </div>
+        </div>
+      </div>
     </div>
   )
 } 

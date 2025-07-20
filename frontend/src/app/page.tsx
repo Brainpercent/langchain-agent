@@ -1,5 +1,7 @@
-import { ChatContainer } from '@/components/ui/ChatContainer'
+'use client'
 
-export default function HomePage() {
-  return <ChatContainer />
+import { MainLayout } from '../components/layout/MainLayout'
+
+export default function Home() {
+  return <MainLayout />
 }

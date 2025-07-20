@@ -80,7 +80,7 @@ export function ChatContainer() {
       
       // Stream the response
       let fullContent = ''
-      await langGraphAPI.streamResponse(response, (chunk) => {
+      for await (const chunk of langGraphAPI.streamResponse(response)) {
         fullContent += chunk
         setChatState(prev => ({
           ...prev,
@@ -90,7 +90,7 @@ export function ChatContainer() {
               : msg
           )
         }))
-      })
+      }
 
       // Mark as completed
       setChatState(prev => ({

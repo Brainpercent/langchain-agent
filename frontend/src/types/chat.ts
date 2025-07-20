@@ -10,7 +10,7 @@ export interface ChatState {
   messages: Message[]
   isLoading: boolean
   error?: string
-  streamingMessageId?: string
+  streamingMessageId?: string | null
 }
 
 export interface ApiResponse {

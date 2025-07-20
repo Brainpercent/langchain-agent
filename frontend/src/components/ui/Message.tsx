@@ -1,5 +1,5 @@
 import { formatTimestamp, cn } from '../../lib/utils'
-import { Message as MessageType } from '../ui/ChatContainer'
+import { Message as MessageType } from '../../types/chat'
 import ReactMarkdown from 'react-markdown'
 import { UserIcon, ComputerDesktopIcon, ClipboardIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react'
@@ -55,7 +55,7 @@ export function Message({ message }: MessageProps) {
             {message.status && (
               <div className={cn(
                 'w-2 h-2 rounded-full',
-                message.status === 'sending' && 'bg-yellow-400',
+                message.status === 'pending' && 'bg-yellow-400',
                 message.status === 'completed' && 'bg-green-400',
                 message.status === 'error' && 'bg-red-400',
                 message.status === 'streaming' && 'bg-blue-400 animate-pulse'

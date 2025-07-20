@@ -5,20 +5,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { MessageList } from './MessageList'
 import { ChatInput } from './ChatInput'
 import { LangGraphAPI, LangGraphMessage } from '../../lib/api'
-
-export interface Message {
-  id: string
-  content: string
-  role: 'user' | 'assistant'
-  timestamp: Date
-  status: 'sending' | 'streaming' | 'completed' | 'error'
-}
-
-interface ChatState {
-  messages: Message[]
-  isLoading: boolean
-  streamingMessageId: string | null
-}
+import { Message, ChatState } from '../../types/chat'
 
 export function ChatContainer() {
   const { user, signOut } = useAuth()

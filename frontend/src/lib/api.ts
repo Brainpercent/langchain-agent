@@ -14,12 +14,10 @@ export class LangGraphAPI {
   private assistantId: string
 
   constructor() {
-    // Use Vercel API endpoint instead of local LangGraph
-    this.baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL 
-      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-      : (process.env.NODE_ENV === 'production' 
-          ? window.location.origin 
-          : 'http://localhost:3000')
+    // Use same origin for API calls to avoid CORS issues
+    this.baseUrl = process.env.NODE_ENV === 'production' 
+      ? window.location.origin 
+      : 'http://localhost:3000'
     this.assistantId = process.env.NEXT_PUBLIC_ASSISTANT_ID || 'deep_researcher'
   }
 

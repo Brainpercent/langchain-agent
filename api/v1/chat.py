@@ -18,6 +18,7 @@ class handler(BaseHTTPRequestHandler):
             self.send_header('Access-Control-Allow-Origin', '*')
             self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
             self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key')
+            self.send_header('Access-Control-Max-Age', '86400')
             self.end_headers()
 
             # Get request data
@@ -72,6 +73,8 @@ class handler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key')
+        self.send_header('Access-Control-Max-Age', '86400')
+        self.send_header('Content-Length', '0')
         self.end_headers()
 
     def validate_api_key(self, api_key):

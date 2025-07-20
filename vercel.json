@@ -2,5 +2,16 @@
   "buildCommand": "cd frontend && npm run build",
   "outputDirectory": "frontend/.next",
   "installCommand": "cd frontend && npm install",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "functions": {
+    "frontend/pages/api/*.py": {
+      "runtime": "python3.9"
+    }
+  },
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://pmschnwcszmwaljxzmgr.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "placeholder-key",
+    "NEXT_PUBLIC_LANGGRAPH_API_URL": "https://langchain-agent-three.vercel.app/api",
+    "NEXT_PUBLIC_ASSISTANT_ID": "Deep Researcher"
+  }
 } 

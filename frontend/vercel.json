@@ -1,13 +1,13 @@
 {
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
-  "installCommand": "npm install",
   "framework": "nextjs",
+  "installCommand": "npm install",
   "outputDirectory": ".next",
   "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@next_public_supabase_url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@next_public_supabase_anon_key",
-    "NEXT_PUBLIC_LANGGRAPH_API_URL": "@next_public_langgraph_api_url",
-    "NEXT_PUBLIC_ASSISTANT_ID": "@next_public_assistant_id"
+    "NEXT_PUBLIC_SUPABASE_URL": "https://pmschnwcszmwaljxzmgr.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "placeholder-key",
+    "NEXT_PUBLIC_LANGGRAPH_API_URL": "http://localhost:2024",
+    "NEXT_PUBLIC_ASSISTANT_ID": "default"
   }
 } 

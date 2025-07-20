@@ -3,9 +3,40 @@
 ## 🎯 **Project Goal**
 Build a professional, user-friendly frontend interface for the Open Deep Research agent that provides an intuitive chat experience with real-time research capabilities and multi-channel API connectivity.
 
-## 🆕 **PHASE 5: API Integration & Multi-Channel Connectivity** 
+## ✅ **COMPLETED PHASES**
 
-### **🎯 New Objectives:**
+### **✅ PHASE 1: Basic Setup & Authentication** - *COMPLETED*
+- [x] Next.js 14 project setup with TypeScript and Tailwind CSS
+- [x] Supabase authentication integration
+- [x] Login/Signup forms with state management
+- [x] Protected routes and authentication guards
+- [x] Environment variable configuration
+
+### **✅ PHASE 2: Chat Interface** - *COMPLETED*
+- [x] Real-time chat UI with streaming responses
+- [x] Message components with user/assistant styling
+- [x] Auto-expanding input with send functionality
+- [x] LangGraph API integration with Bearer token auth
+- [x] Error handling and loading states
+
+### **✅ PHASE 3: UI Polish & Enhancement** - *COMPLETED*
+- [x] Responsive design for mobile and desktop
+- [x] Beautiful message formatting with ReactMarkdown
+- [x] Enhanced link rendering with proper styling
+- [x] Code syntax highlighting and copy-to-clipboard
+- [x] Proper spacing, typography, and visual hierarchy
+- [x] Professional LangGraph Studio-inspired design
+
+### **✅ PHASE 4: Layout & Navigation** - *COMPLETED*
+- [x] LangGraph Studio-style sidebar navigation
+- [x] Multi-section layout (Main, Integrations, System)
+- [x] Page routing and state management
+- [x] User profile section with sign-out functionality
+- [x] Placeholder pages for future features
+
+## 🆕 **PHASE 5: API Integration & Multi-Channel Connectivity** - *IN PROGRESS*
+
+### **🎯 Current Objectives:**
 - **🔗 Multi-Channel API Integration**: Enable the AI assistant to connect to various platforms (Discord, Slack, Telegram, WhatsApp, etc.)
 - **📡 RESTful API Endpoints**: Create standardized API endpoints for external integrations
 - **🔌 Webhook Support**: Support incoming and outgoing webhooks for real-time communication
@@ -15,33 +46,39 @@ Build a professional, user-friendly frontend interface for the Open Deep Researc
 
 ### **🎯 Implementation Strategy:**
 
-#### **5.1: Enhanced Message Formatting** ⏱️ *1 hour*
-- [ ] Improve ReactMarkdown rendering with proper link handling
-- [ ] Add code syntax highlighting
-- [ ] Better spacing and typography
-- [ ] Support for rich media (images, videos)
-- [ ] Copy-to-clipboard functionality
+#### **5.1: Enhanced Message Formatting** ⏱️ *1 hour* - ✅ *COMPLETED*
+- [x] Improve ReactMarkdown rendering with proper link handling
+- [x] Add code syntax highlighting
+- [x] Better spacing and typography
+- [x] Support for rich media (images, videos)
+- [x] Copy-to-clipboard functionality
 
-#### **5.2: API Gateway Setup** ⏱️ *2 hours*
+#### **5.2: Channel Management UI** ⏱️ *2 hours* - ✅ *COMPLETED*
+- [x] Channel Manager interface with platform cards
+- [x] Discord, Slack, Telegram, WhatsApp connection buttons
+- [x] Connection status indicators
+- [x] Professional integration dashboard
+
+#### **5.3: API Management UI** ⏱️ *1.5 hours* - ✅ *COMPLETED*
+- [x] API Keys management interface
+- [x] Webhook configuration dashboard
+- [x] Security settings and token management
+- [x] Usage tracking placeholder
+
+#### **5.4: API Gateway Setup** ⏱️ *2 hours* - 🔄 *NEXT*
 - [ ] Create `/api/v1/chat` endpoint for external integrations
 - [ ] Implement standardized request/response format
 - [ ] Add rate limiting and authentication middleware
 - [ ] Create API documentation
 
-#### **5.3: Multi-Channel Connectors** ⏱️ *3 hours*
+#### **5.5: Multi-Channel Connectors** ⏱️ *3 hours* - 🔄 *NEXT*
 - [ ] Discord bot integration
 - [ ] Slack app integration  
 - [ ] Telegram bot support
 - [ ] WhatsApp Business API connector
 - [ ] Generic webhook handler
 
-#### **5.4: Channel Management Dashboard** ⏱️ *2 hours*
-- [ ] Add "Channels" section to sidebar
-- [ ] Channel configuration interface
-- [ ] Real-time connection status
-- [ ] Usage statistics per channel
-
-#### **5.5: Security & Authentication** ⏱️ *1.5 hours*
+#### **5.6: Security & Authentication** ⏱️ *1.5 hours* - 🔄 *NEXT*
 - [ ] API key generation and management
 - [ ] Role-based access control
 - [ ] Request signing and validation
@@ -49,343 +86,177 @@ Build a professional, user-friendly frontend interface for the Open Deep Researc
 
 ---
 
-## 🔑 **Golden Rules**
+## 🎨 **UI/UX Design Specifications**
 
-### **1. Keep It Simple First (MVP Approach)**
-- ✅ Start with core chat functionality
-- ✅ Add features incrementally
-- ✅ Test each component before moving forward
-- ❌ Don't over-engineer from the start
+### **Design Philosophy**
+- **LangGraph Studio Inspiration**: Clean, professional interface matching LangGraph's design language
+- **Developer-First**: Intuitive for technical users while accessible to non-technical stakeholders
+- **Responsive**: Mobile-first design that scales beautifully to desktop
+- **Performance**: Fast loading, smooth animations, optimized for real-time interactions
 
-### **2. User Experience First**
-- ✅ Mobile-responsive design
-- ✅ Fast loading times
-- ✅ Clear visual feedback
-- ✅ Intuitive navigation
+### **Color Palette**
+- **Primary**: Blue (#3B82F6) for actions and highlights
+- **Secondary**: Gray (#6B7280) for secondary elements
+- **Success**: Green (#10B981) for positive states
+- **Warning**: Yellow (#F59E0B) for caution states
+- **Error**: Red (#EF4444) for error states
+- **Background**: Light gray (#F9FAFB) for main background
 
-### **3. Maintainable Code**
-- ✅ TypeScript for type safety
-- ✅ Component-based architecture
-- ✅ Clear folder structure
-- ✅ Consistent naming conventions
-
-### **4. Production Ready**
-- ✅ Error handling and edge cases
-- ✅ Loading states and user feedback
-- ✅ Environment configuration
-- ✅ Easy deployment process
+### **Typography**
+- **Headers**: Font weight 600-700, appropriate sizing hierarchy
+- **Body**: Font weight 400, 14-16px for readability
+- **Code**: Monospace font for technical content
+- **Links**: Blue with underline, proper hover states
 
 ---
 
-## 📋 **Phase 1: Foundation & Basic Chat Interface**
+## 🔗 **Multi-Channel API Integration Plan**
 
-### **Task 1.1: Project Setup** ⏱️ *30 minutes* ✅ **COMPLETED**
-- [x] Create Next.js 14 app with TypeScript
-- [x] Set up Tailwind CSS for styling
-- [x] Configure project structure
-- [x] Install essential dependencies
-- [x] Create basic layout components
+### **📋 Supported Platforms**
 
-**Files created:**
-- `frontend/package.json` ✅
-- `frontend/tailwind.config.js` ✅
-- `frontend/app/layout.tsx` ✅
-- `frontend/app/page.tsx` ✅
-- `frontend/src/lib/utils.ts` ✅
-- `frontend/src/types/chat.ts` ✅
+#### **1. Discord Integration**
+- **Bot Setup**: Create Discord application and bot
+- **Slash Commands**: `/research <question>` command for research queries
+- **Channel Integration**: Bot can respond in specific channels
+- **Permissions**: Configurable permissions for server admins
+- **Rich Embeds**: Format responses with Discord embeds
 
-**Progress Notes:**
-- ✅ Next.js 14 project created successfully with TypeScript and Tailwind
-- ✅ Additional dependencies installed: @headlessui/react, @heroicons/react, clsx, react-markdown
-- ✅ Project structure created: components/ui, components/auth, lib, types
-- ✅ Basic type definitions and utility functions added
-- ✅ Root layout and home page configured
+#### **2. Slack Integration**
+- **Slack App**: Create Slack application with bot user
+- **Slash Commands**: `/research <question>` and `/ask <question>`
+- **Interactive Components**: Buttons for follow-up questions
+- **Channel Integration**: Bot can be added to channels
+- **Thread Support**: Responses can be threaded for organization
 
-### **Task 1.2: Chat UI Components** ⏱️ *2 hours* ✅ **COMPLETED**
-- [x] Create Message component (user/assistant)
-- [x] Create MessageList component
-- [x] Create ChatInput component
-- [x] Create ChatContainer component
-- [x] Implement basic styling with Tailwind
+#### **3. Telegram Integration**
+- **Bot API**: Create Telegram bot via BotFather
+- **Inline Queries**: Support for inline research queries
+- **Group/Channel Support**: Bot works in groups and channels
+- **Command Interface**: `/research`, `/ask`, `/help` commands
+- **Rich Formatting**: Use Telegram's formatting for better readability
 
-**Files created:**
-- `frontend/src/components/ui/Message.tsx` ✅
-- `frontend/src/components/ui/MessageList.tsx` ✅
-- `frontend/src/components/ui/ChatInput.tsx` ✅
-- `frontend/src/components/ui/ChatContainer.tsx` ✅
+#### **4. WhatsApp Business API**
+- **Business Account**: WhatsApp Business API integration
+- **Message Templates**: Pre-approved templates for responses
+- **Webhook Integration**: Real-time message handling
+- **Media Support**: Support for sending images and documents
+- **Business Profile**: Professional business profile setup
 
-**Progress Notes:**
-- ✅ Message component with user/assistant styling, avatars, timestamps, and status indicators
-- ✅ MessageList with auto-scroll, loading states, and empty state
-- ✅ ChatInput with auto-expanding textarea, keyboard shortcuts, and send button
-- ✅ ChatContainer managing chat state with placeholder API integration
-- ✅ Responsive design with Tailwind CSS
-- ✅ TypeScript integration with proper type definitions
-- ✅ Markdown support for AI responses
-- ✅ Basic error handling and loading states
+### **📡 API Architecture**
 
-### **Task 1.3: API Integration** ⏱️ *1 hour* ✅ **COMPLETED**
-- [x] Create API client for LangGraph backend
-- [x] Implement message sending functionality
-- [x] Handle API responses and errors
-- [x] Add basic loading states
-- [x] Implement real-time streaming support
-
-**Files created:**
-- `frontend/src/lib/api.ts` ✅
-
-**Progress Notes:**
-- ✅ LangGraphAPI class with streaming support
-- ✅ Server-Sent Events (SSE) implementation for real-time responses
-- ✅ Connection to LangGraph server on port 2024
-- ✅ Assistant ID integration (e9a5370f-7a53-55a8-ada8-6ab9ef15bb5b)
-- ✅ Conversation history management
-- ✅ Error handling with user-friendly messages
-- ✅ Streaming visual indicators (spinning avatar, typing cursor)
-- ✅ Real-time message updates as AI responds
-- ✅ Configurable model selection (GPT-4o)
-
-**🎯 Ready for Phase 2!** The MVP chat interface is now fully functional with real AI research capabilities!
-
----
-
-## 📋 **Phase 2: Real-time Features & Enhancements**
-
-### **Task 2.1: Streaming Support** ⏱️ *2 hours*
-- [ ] Implement Server-Sent Events (SSE) for real-time responses
-- [ ] Add typing indicators
-- [ ] Show research progress in real-time
-- [ ] Handle streaming message updates
-
-### **Task 2.2: Research Progress UI** ⏱️ *1.5 hours*
-- [ ] Create ProgressIndicator component
-- [ ] Show current research step
-- [ ] Display search queries being executed
-- [ ] Add visual progress bar
-
-**Files to create:**
-- `frontend/components/ui/ProgressIndicator.tsx`
-- `frontend/components/ui/ResearchStep.tsx`
-
-### **Task 2.3: Message Enhancements** ⏱️ *1 hour*
-- [ ] Add message timestamps
-- [ ] Implement copy-to-clipboard functionality
-- [ ] Add message status indicators
-- [ ] Support for markdown rendering
-
----
-
-## 📋 **Phase 3: Advanced Features**
-
-### **Task 3.1: Authentication Integration** ⏱️ *2 hours*
-- [ ] Integrate with existing Supabase auth
-- [ ] Create login/signup components
-- [ ] Add protected routes
-- [ ] Handle authentication state
-
-**Files to create:**
-- `frontend/components/auth/LoginForm.tsx`
-- `frontend/components/auth/AuthProvider.tsx`
-- `frontend/lib/auth.ts`
-
-### **Task 3.2: Chat History & Persistence** ⏱️ *2 hours*
-- [ ] Save chat conversations
-- [ ] Create sidebar with chat history
-- [ ] Implement conversation switching
-- [ ] Add search functionality for past chats
-
-**Files to create:**
-- `frontend/components/ui/Sidebar.tsx`
-- `frontend/components/ui/ChatHistory.tsx`
-
-### **Task 3.3: Settings & Configuration** ⏱️ *1.5 hours*
-- [ ] Create settings panel
-- [ ] Allow users to configure research parameters
-- [ ] Model selection interface
-- [ ] Save user preferences
-
-**Files to create:**
-- `frontend/components/ui/SettingsPanel.tsx`
-- `frontend/components/ui/ModelSelector.tsx`
-
----
-
-## 📋 **Phase 4: Polish & Deployment**
-
-### **Task 4.1: Responsive Design** ⏱️ *1 hour*
-- [ ] Ensure mobile responsiveness
-- [ ] Test on different screen sizes
-- [ ] Optimize touch interactions
-- [ ] Add PWA capabilities
-
-### **Task 4.2: Error Handling & UX** ⏱️ *1 hour*
-- [ ] Implement comprehensive error handling
-- [ ] Add retry mechanisms
-- [ ] Create error boundary components
-- [ ] Add offline detection
-
-### **Task 4.3: Performance Optimization** ⏱️ *45 minutes*
-- [ ] Implement code splitting
-- [ ] Optimize bundle size
-- [ ] Add loading skeletons
-- [ ] Implement virtual scrolling for long conversations
-
-### **Task 4.4: Deployment Preparation** ⏱️ *1 hour*
-- [ ] Create Docker configuration
-- [ ] Set up environment variables
-- [ ] Create deployment scripts
-- [ ] Configure for Railway/Render deployment
-
-**Files to create:**
-- `frontend/Dockerfile`
-- `frontend/.env.example`
-- `deploy/docker-compose.yml`
-
----
-
-## 🛠 **Technical Stack**
-
-### **Frontend:**
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **UI Components**: Custom components + Headless UI
-- **State Management**: React hooks + Context API
-- **Real-time**: Server-Sent Events (SSE)
-
-### **Backend:**
-- **API**: Your existing LangGraph server (port 2024)
-- **Authentication**: Supabase (already configured)
-- **Database**: PostgreSQL via Supabase
-
-### **Deployment:**
-- **Platform**: Railway or Render
-- **Containerization**: Docker
-- **Environment**: Production-ready configuration
-
----
-
-## 📁 **Project Structure**
-
+#### **RESTful Endpoints**
 ```
-frontend/
-├── app/                    # Next.js App Router
-│   ├── layout.tsx         # Root layout ✅
-│   ├── page.tsx           # Home page ✅
-│   ├── login/             # Auth pages
-│   └── chat/              # Chat pages
-├── components/
-│   ├── ui/                # Reusable UI components ✅
-│   ├── auth/              # Authentication components ✅
-│   └── chat/              # Chat-specific components
-├── lib/
-│   ├── api.ts             # API client
-│   ├── auth.ts            # Auth helpers
-│   └── utils.ts           # Utility functions ✅
-├── types/                 # TypeScript type definitions ✅
-├── styles/                # Global styles
-└── public/                # Static assets
+POST /api/v1/chat
+GET  /api/v1/channels
+POST /api/v1/channels/{platform}/connect
+DELETE /api/v1/channels/{platform}/disconnect
+GET  /api/v1/usage
+POST /api/v1/webhooks
+```
+
+#### **Request Format**
+```json
+{
+  "message": "What are the latest AI developments?",
+  "platform": "discord",
+  "channel_id": "channel_123",
+  "user_id": "user_456",
+  "context": {
+    "thread_id": "optional",
+    "reply_to": "optional"
+  }
+}
+```
+
+#### **Response Format**
+```json
+{
+  "response": "Formatted research response...",
+  "sources": ["url1", "url2"],
+  "processing_time": 2.3,
+  "tokens_used": 1250,
+  "status": "success"
+}
+```
+
+### **🔐 Security Implementation**
+
+#### **API Key Management**
+- **Generation**: Secure random key generation
+- **Scoping**: Platform-specific and permission-based scoping
+- **Rotation**: Automatic and manual key rotation
+- **Monitoring**: Usage tracking and abuse detection
+
+#### **Rate Limiting**
+- **Per-Key Limits**: Different limits per API key
+- **Platform Limits**: Specific limits per platform
+- **User Limits**: Per-user rate limiting
+- **Burst Protection**: Handle traffic spikes gracefully
+
+#### **Authentication Flow**
+```
+1. Platform authenticates with API key
+2. Request is validated and rate-limited
+3. User context is verified
+4. Research query is processed
+5. Response is formatted for platform
+6. Usage is logged and tracked
 ```
 
 ---
 
-## 🎯 **Success Criteria**
+## 🚀 **Deployment & Infrastructure**
 
-### **MVP (Phase 1-2):**
-- ✅ Users can send messages and receive AI responses
-- ✅ Real-time streaming of research progress
-- ✅ Mobile-responsive interface
-- ✅ Basic error handling
+### **Current Setup**
+- **Frontend**: Deployed on Vercel with automatic deployments
+- **Backend**: LangGraph server with streaming capabilities
+- **Database**: Supabase for user authentication and data storage
+- **Environment**: Production-ready with proper environment variables
 
-### **Full Product (Phase 3-4):**
-- ✅ User authentication and chat history
-- ✅ Configurable research settings
-- ✅ Professional, polished UI
-- ✅ Production deployment ready
+### **Infrastructure Requirements for Multi-Channel**
+- **API Gateway**: Rate limiting and request routing
+- **Message Queue**: Handle high-volume platform requests
+- **Cache Layer**: Redis for response caching
+- **Monitoring**: Real-time usage and performance monitoring
+- **Logging**: Comprehensive audit logs for security
 
 ---
 
-## 🚀 **Getting Started**
+## 📊 **Success Metrics**
 
-1. **Phase 1**: Start with Task 1.1 - Project Setup ✅
-2. **Focus**: Complete one task at a time
-3. **Test**: Verify each component works before moving forward
-4. **Iterate**: Get MVP working first, then enhance
+### **User Experience**
+- **Response Time**: < 3 seconds for research queries
+- **Accuracy**: High-quality research responses
+- **Uptime**: 99.9% availability
+- **User Satisfaction**: Positive feedback and adoption
 
-**🔥 Complete Implementation:**
-- ✅ Task 1.1: Project Setup (Next.js 14 + TypeScript + Tailwind)
-- ✅ Task 1.2: Chat UI Components (Message, MessageList, ChatInput, ChatContainer)  
-- ✅ Task 1.3: API Integration (LangGraph backend + real-time streaming)
-- ✅ **Task 3.1: Authentication Integration** (Supabase auth + Credentials configured)
-- ✅ **Task 4.4: Docker Deployment** (Dockerfile + Docker Compose + Production config)
+### **Platform Integration**
+- **Connection Success**: Successful platform connections
+- **Message Throughput**: Handle concurrent requests
+- **Error Rates**: < 1% error rate across platforms
+- **Usage Growth**: Increasing API usage over time
 
-**🚀 What's Working NOW:**
-- **🔐 Complete Authentication Flow** - Login/signup with Supabase credentials
-- **🤖 Real AI Research Responses** - Connected to LangGraph server (port 2024)
-- **⚡ Real-time Streaming** - See AI responses appear word-by-word
-- **🎨 Beautiful Interface** - Professional chat UI with user/assistant styling
-- **📱 Mobile Responsive** - Works perfectly on all devices
-- **🛡️ Secure API Calls** - Bearer token authentication with proper error handling
-- **👤 User Session Management** - Welcome message, sign out, persistent sessions
-- **🐳 Docker Ready** - Complete containerization for production deployment
+---
 
-**🎯 Ready to Use:**
-1. **LangGraph Backend**: Already running on port 2024 ✅
-2. **Frontend**: Starting with environment variables ✅  
-3. **Supabase**: Credentials configured ✅
-4. **Authentication**: Full login/signup flow ✅
-5. **Docker**: Production deployment ready ✅
+## 🔄 **Next Immediate Steps**
 
-**📱 Your AI Research Assistant is LIVE!**
-- **Local Development**: `http://localhost:3000`
-- **Docker Deployment**: `docker-compose up --build`
-- **Sign up** with any email/password
-- **Start researching** - ask any question!
+1. **✅ Authentication Flow**: Login/signup working properly
+2. **✅ Enhanced UI**: All integration pages have content
+3. **🔄 API Gateway**: Implement standardized API endpoints
+4. **🔄 Discord Bot**: Create first platform integration
+5. **🔄 Webhook System**: Real-time event handling
+6. **🔄 Usage Analytics**: Track and display API usage
 
-**🔧 Deployment Files Created:**
-- `frontend/Dockerfile` - Production-ready container ✅
-- `docker-compose.yml` - Full stack deployment ✅
-- `frontend/next.config.js` - Docker-optimized config ✅
-- `frontend/start-dev.ps1` - Secure startup script (reads from .env) ✅
-- `frontend/README-AI-Assistant.md` - Complete documentation ✅
+---
 
-**🚢 DEPLOYMENT COMMANDS:**
+## 🎯 **Long-term Vision**
 
-**Local Development:**
-```bash
-cd frontend
-npm install
-npm run dev
-```
+Transform the AI Research Assistant into a **comprehensive multi-platform research tool** that can:
 
-**Docker Deployment:**
-```bash
-# Your .env file is already configured! ✅
-# Just build and run with Docker Compose
-docker-compose up --build
+- **📱 Reach Users Anywhere**: Available on Discord, Slack, Telegram, WhatsApp, and web
+- **🤖 Intelligent Routing**: Smart distribution of research tasks
+- **📊 Analytics Dashboard**: Comprehensive usage and performance insights  
+- **🔌 Extensible Architecture**: Easy addition of new platforms and features
+- **🌐 Enterprise Ready**: Scalable, secure, and reliable for business use
 
-# Access at http://localhost:3000
-```
-
-**🔐 UPDATED SUPABASE CREDENTIALS:**
-Supabase has updated to new API key format. Update your .env file:
-```
-NEXT_PUBLIC_SUPABASE_URL=https://pmschnwcszmwaljxzmgr.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_2UpeYuhWRq7wLqYlsl3p3Q_nS3g-2Wh
-NEXT_PUBLIC_LANGGRAPH_API_URL=http://localhost:2024
-NEXT_PUBLIC_ASSISTANT_ID=Deep Researcher
-```
-
-**🎯 CURRENT STATUS: 90% COMPLETE!**
-
-**✅ COMPLETED PHASES:**
-- **Phase 1**: Foundation & Basic Chat Interface (100%)
-- **Phase 3**: Authentication Integration (100%)  
-- **Phase 4**: Docker Deployment (100%)
-
-**🔄 OPTIONAL REMAINING:**
-- **Phase 2**: Progress indicators and copy-to-clipboard
-- **Phase 3**: Chat history sidebar and settings panel
-- **Phase 4**: Advanced error handling and performance optimization
-
-**🎉 YOUR AI RESEARCH ASSISTANT IS PRODUCTION-READY! 🎉** 
+**Built with ❤️ using Next.js 14, TypeScript, Tailwind CSS, and LangGraph** 

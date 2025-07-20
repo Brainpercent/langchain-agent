@@ -7,13 +7,6 @@ import traceback
 # Add the src directory to Python path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
-try:
-    from open_deep_research.deep_researcher import deep_researcher
-    from langchain_core.messages import HumanMessage
-except ImportError as e:
-    print(f"Import error: {e}")
-    traceback.print_exc()
-
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         try:
@@ -41,48 +34,84 @@ class handler(BaseHTTPRequestHandler):
             # Get the latest user message
             user_message = messages[-1]['content']
 
-            # Initialize configuration
-            config = {
-                "configurable": {
-                    "model_name": "gpt-4o",
-                    "search_api": "tavily"
+            # Check if we have API keys configured
+            openai_key = os.environ.get('OPENAI_API_KEY')
+            
+            if not openai_key:
+                # Send test response if no API keys
+                test_response = f"Hello! I received your message: '{user_message}'. However, I need API keys to be configured in Vercel to provide AI research capabilities. Please add OPENAI_API_KEY and TAVILY_API_KEY to your Vercel environment variables."
+                
+                # Send as streaming chunks
+                words = test_response.split()
+                for i, word in enumerate(words):
+                    chunk_data = json.dumps({
+                        "type": "chunk",
+                        "content": word + " "
+                    })
+                    self.wfile.write(f"data: {chunk_data}\n\n".encode())
+                    self.wfile.flush()
+                
+                # Send completion
+                final_data = json.dumps({
+                    "type": "complete",
+                    "content": test_response
+                })
+                self.wfile.write(f"data: {final_data}\n\n".encode())
+                self.wfile.write(b"data: [DONE]\n\n")
+                return
+
+            # Try to import and use the real LangGraph system
+            try:
+                from open_deep_research.deep_researcher import deep_researcher
+                from langchain_core.messages import HumanMessage
+                
+                # Initialize configuration
+                config = {
+                    "configurable": {
+                        "model_name": "gpt-4o",
+                        "search_api": "tavily"
+                    }
                 }
-            }
 
-            # Send initial response
-            self.wfile.write(b'data: {"type": "start"}\n\n')
-            self.wfile.flush()
+                # Send initial response
+                self.wfile.write(b'data: {"type": "start"}\n\n')
+                self.wfile.flush()
 
-            # Create the researcher graph
-            app = deep_researcher
+                # Create the researcher graph
+                app = deep_researcher
 
-            # Stream the research process
-            full_response = ""
-            for chunk in app.stream(
-                {"messages": [HumanMessage(content=user_message)]},
-                config=config
-            ):
-                if 'messages' in chunk:
-                    # Extract content from the chunk
-                    for message in chunk['messages']:
-                        if hasattr(message, 'content'):
-                            content = message.content
-                            full_response += content
-                            # Send chunk
-                            chunk_data = json.dumps({
-                                "type": "chunk",
-                                "content": content
-                            })
-                            self.wfile.write(f"data: {chunk_data}\n\n".encode())
-                            self.wfile.flush()
+                # Stream the research process
+                full_response = ""
+                for chunk in app.stream(
+                    {"messages": [HumanMessage(content=user_message)]},
+                    config=config
+                ):
+                    if 'messages' in chunk:
+                        # Extract content from the chunk
+                        for message in chunk['messages']:
+                            if hasattr(message, 'content'):
+                                content = message.content
+                                full_response += content
+                                # Send chunk
+                                chunk_data = json.dumps({
+                                    "type": "chunk",
+                                    "content": content
+                                })
+                                self.wfile.write(f"data: {chunk_data}\n\n".encode())
+                                self.wfile.flush()
 
-            # Send final response
-            final_data = json.dumps({
-                "type": "complete",
-                "content": full_response
-            })
-            self.wfile.write(f"data: {final_data}\n\n".encode())
-            self.wfile.write(b"data: [DONE]\n\n")
+                # Send final response
+                final_data = json.dumps({
+                    "type": "complete",
+                    "content": full_response
+                })
+                self.wfile.write(f"data: {final_data}\n\n".encode())
+                self.wfile.write(b"data: [DONE]\n\n")
+                
+            except ImportError as e:
+                error_response = f"Import error: {str(e)}. The LangGraph dependencies may not be installed correctly."
+                error_data = json.dumps({"error": error_response})
+                self.wfile.write(f"data: {error_data}\n\n".encode())
             
         except Exception as e:
             error_msg = f"Error: {str(e)}\n{traceback.format_exc()}"

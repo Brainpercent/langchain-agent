@@ -4,12 +4,7 @@
   "regions": ["iad1"],
   "functions": {
     "api/langgraph.py": {
-      "runtime": "@vercel/python"
-    }
-  },
-  "build": {
-    "env": {
-      "PYTHON_VERSION": "3.9"
+      "runtime": "python3.11"
     }
   },
   "installCommand": "npm install",

@@ -4,7 +4,7 @@
   "regions": ["iad1"],
   "functions": {
     "api/langgraph.py": {
-      "runtime": "python3.9"
+      "runtime": "@vercel/python"
     }
   },
   "build": {

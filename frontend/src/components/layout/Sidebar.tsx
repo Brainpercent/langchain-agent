@@ -9,7 +9,10 @@ import {
   BeakerIcon,
   ClockIcon,
   UserCircleIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  WifiIcon,
+  LinkIcon,
+  KeyIcon
 } from '@heroicons/react/24/outline'
 
 interface SidebarProps {
@@ -26,25 +29,26 @@ export function Sidebar({ currentPage, onPageChange }: SidebarProps) {
     { id: 'experiments', label: 'Experiments', icon: BeakerIcon, count: 0 },
     { id: 'monitoring', label: 'Monitoring', icon: ChartBarIcon, count: 0 },
     { id: 'history', label: 'Chat History', icon: ClockIcon },
+  ]
+
+  const channelItems = [
+    { id: 'channels', label: 'Channel Manager', icon: WifiIcon },
+    { id: 'api-keys', label: 'API Keys', icon: KeyIcon },
+    { id: 'webhooks', label: 'Webhooks', icon: LinkIcon },
+  ]
+
+  const settingsItems = [
     { id: 'docs', label: 'Documentation', icon: DocumentTextIcon },
     { id: 'settings', label: 'Settings', icon: Cog6ToothIcon },
   ]
 
-  return (
-    <div className="w-64 bg-gray-900 text-white h-screen flex flex-col">
-      {/* Header */}
-      <div className="p-4 border-b border-gray-700">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">AI</span>
-          </div>
-          <span className="font-semibold text-lg">Deep Research</span>
-        </div>
-      </div>
-
-      {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-2">
-        {menuItems.map((item) => {
+  const renderMenuSection = (title: string, items: typeof menuItems) => (
+    <div className="mb-6">
+      <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-3">
+        {title}
+      </h3>
+      <div className="space-y-1">
+        {items.map((item) => {
           const Icon = item.icon
           const isActive = currentPage === item.id
           
@@ -70,6 +74,27 @@ export function Sidebar({ currentPage, onPageChange }: SidebarProps) {
             </button>
           )
         })}
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="w-64 bg-gray-900 text-white h-screen flex flex-col">
+      {/* Header */}
+      <div className="p-4 border-b border-gray-700">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-sm">AI</span>
+          </div>
+          <span className="font-semibold text-lg">Deep Research</span>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 p-4 overflow-y-auto">
+        {renderMenuSection("Main", menuItems)}
+        {renderMenuSection("Integrations", channelItems)}
+        {renderMenuSection("System", settingsItems)}
       </nav>
 
       {/* User Section */}

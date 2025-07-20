@@ -7,9 +7,10 @@ import { Message as MessageType } from '../../types/chat'
 interface MessageListProps {
   messages: MessageType[]
   isLoading?: boolean
+  streamingMessageId?: string | null
 }
 
-export function MessageList({ messages, isLoading }: MessageListProps) {
+export function MessageList({ messages, isLoading, streamingMessageId }: MessageListProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Auto-scroll to bottom when new messages arrive

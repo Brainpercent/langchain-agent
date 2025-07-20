@@ -7,7 +7,7 @@
   "env": {
     "NEXT_PUBLIC_SUPABASE_URL": "https://pmschnwcszmwaljxzmgr.supabase.co",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY": "placeholder-key",
-    "NEXT_PUBLIC_LANGGRAPH_API_URL": "https://langchain-agent-lovat.vercel.app/api",
+    "NEXT_PUBLIC_LANGGRAPH_API_URL": "https://langchain-agent-6kp40h5rz-edwards-projects-f73afe36.vercel.app/api",
     "NEXT_PUBLIC_ASSISTANT_ID": "Deep Researcher"
   }
 } 

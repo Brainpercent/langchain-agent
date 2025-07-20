@@ -57,7 +57,7 @@ export class LangGraphAPI {
 
       console.log('Request body:', JSON.stringify(requestBody, null, 2))
 
-      const response = await fetch(`${this.baseUrl}/api/v1/chat`, {
+      const response = await fetch(`${this.baseUrl}/api/chat`, {
         method: 'POST',
         headers,
         body: JSON.stringify(requestBody)

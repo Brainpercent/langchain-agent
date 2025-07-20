@@ -9,7 +9,7 @@ from urllib.parse import parse_qs
 import asyncio
 import aiohttp
 
-class handler(BaseHTTPRequestHandler):
+class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         try:
             # CORS headers
@@ -344,4 +344,59 @@ The research indicates significant developments in this area, with implications 
             "timestamp": int(time.time())
         }
         
-        self.wfile.write(json.dumps(error_response).encode('utf-8')) 
+        self.wfile.write(json.dumps(error_response).encode('utf-8'))
+
+# Alternative function-based handler for Vercel
+def handler(request):
+    """Simple function-based handler for Vercel compatibility"""
+    if request.method == 'OPTIONS':
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-API-Key',
+                'Access-Control-Max-Age': '86400',
+            },
+            'body': ''
+        }
+    
+    if request.method != 'POST':
+        return {
+            'statusCode': 405,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'error': 'Method not allowed'})
+        }
+    
+    try:
+        # Parse request body
+        if hasattr(request, 'body'):
+            data = json.loads(request.body)
+        else:
+            data = json.loads(request.get_json())
+        
+        # Get authorization token
+        auth_header = request.headers.get('Authorization', '')
+        access_token = auth_header.replace('Bearer ', '') if auth_header.startswith('Bearer ') else None
+        
+        # Create handler instance and process request
+        handler_instance = Handler()
+        response = handler_instance.process_chat_request(data, access_token)
+        
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-API-Key',
+            },
+            'body': json.dumps(response)
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'error': f'Internal server error: {str(e)}'})
+        } 

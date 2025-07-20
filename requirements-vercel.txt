@@ -1,0 +1,25 @@
+# Vercel-optimized requirements for LangGraph Deep Research
+
+# Core LangGraph and LangChain (minimal versions)
+langgraph>=0.2.0
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-openai>=0.2.0
+langchain-anthropic>=0.2.0
+
+# Configuration and validation
+pydantic>=2.5.0
+typing-extensions>=4.8.0
+
+# Web search APIs
+tavily-python>=0.3.0
+
+# HTTP and async
+httpx>=0.25.0
+aiohttp>=3.9.0
+
+# Environment management
+python-dotenv>=1.0.0
+
+# OpenAI for fallback
+openai>=1.0.0 

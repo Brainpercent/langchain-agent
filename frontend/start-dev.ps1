@@ -2,33 +2,40 @@
 # This script loads environment variables from .env file and starts the Next.js development server
 
 Write-Host "🚀 Starting AI Research Assistant Frontend..." -ForegroundColor Green
-Write-Host "Loading environment variables from .env file..." -ForegroundColor Yellow
+Write-Host "Setting up environment variables..." -ForegroundColor Yellow
 
-# Check if .env file exists
+# Set the correct frontend environment variables for Vercel deployment
+[Environment]::SetEnvironmentVariable("NEXT_PUBLIC_SUPABASE_URL", "https://pmschnwcszmwaljxzmgr.supabase.co", "Process")
+[Environment]::SetEnvironmentVariable("NEXT_PUBLIC_SUPABASE_ANON_KEY", "sb_publishable_2UpeYuhWRq7wLqYlsl3p3Q_nS3g-2Wh", "Process")
+[Environment]::SetEnvironmentVariable("NEXT_PUBLIC_LANGGRAPH_API_URL", "https://langchain-agent-kv9qu5rik-edwards-projects-f73afe36.vercel.app/api", "Process")
+[Environment]::SetEnvironmentVariable("NEXT_PUBLIC_ASSISTANT_ID", "Deep Researcher", "Process")
+
+Write-Host "✅ Set NEXT_PUBLIC_SUPABASE_URL" -ForegroundColor Green
+Write-Host "✅ Set NEXT_PUBLIC_SUPABASE_ANON_KEY" -ForegroundColor Green  
+Write-Host "✅ Set NEXT_PUBLIC_LANGGRAPH_API_URL (Vercel deployment)" -ForegroundColor Green
+Write-Host "✅ Set NEXT_PUBLIC_ASSISTANT_ID" -ForegroundColor Green
+
+# Check if .env file exists for additional backend variables
 if (Test-Path "../.env") {
-    Write-Host "Found .env file - loading environment variables..." -ForegroundColor Green
+    Write-Host "Found .env file - loading backend environment variables..." -ForegroundColor Yellow
     
-    # Load .env file
+    # Load .env file for backend variables only
     Get-Content "../.env" | ForEach-Object {
         if ($_ -match "^([^#].*)=(.*)$") {
             $name = $matches[1]
             $value = $matches[2]
-            [Environment]::SetEnvironmentVariable($name, $value, "Process")
-            Write-Host "Set $name" -ForegroundColor Gray
+            # Only load non-frontend variables
+            if (-not $name.StartsWith("NEXT_PUBLIC_")) {
+                [Environment]::SetEnvironmentVariable($name, $value, "Process")
+                Write-Host "Set $name" -ForegroundColor Gray
+            }
         }
     }
 } else {
-    Write-Host "⚠️  Warning: .env file not found!" -ForegroundColor Red
-    Write-Host "Please create a .env file with your credentials." -ForegroundColor Yellow
-    Write-Host "Required variables:" -ForegroundColor Yellow
-    Write-Host "  NEXT_PUBLIC_SUPABASE_URL=your_supabase_url" -ForegroundColor Gray
-    Write-Host "  NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key" -ForegroundColor Gray
-    Write-Host "  NEXT_PUBLIC_LANGGRAPH_API_URL=http://localhost:2024" -ForegroundColor Gray
-    Write-Host "  NEXT_PUBLIC_ASSISTANT_ID=Deep Researcher" -ForegroundColor Gray
-    exit 1
+    Write-Host "⚠️  Note: .env file not found (optional for frontend)" -ForegroundColor Yellow
 }
 
-Write-Host "Environment variables loaded successfully!" -ForegroundColor Green
+Write-Host "Environment variables configured successfully!" -ForegroundColor Green
 Write-Host "Starting Next.js development server..." -ForegroundColor Yellow
 
 # Start the development server

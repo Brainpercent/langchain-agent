@@ -2,37 +2,43 @@ from http.server import BaseHTTPRequestHandler
 import json
 import time
 
-class handler(BaseHTTPRequestHandler):
-    def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-        self.end_headers()
-
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.end_headers()
-        
+def handler(request):
+    # Handle CORS preflight
+    if request.method == 'OPTIONS':
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+            },
+            'body': ''
+        }
+    
+    # Handle GET request
+    if request.method == 'GET':
         response = {
             "status": "success", 
             "message": "🎉 CHAT API IS WORKING!",
             "timestamp": int(time.time())
         }
-        self.wfile.write(json.dumps(response).encode())
-
-    def do_POST(self):
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.end_headers()
-
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps(response)
+        }
+    
+    # Handle POST request
+    if request.method == 'POST':
         try:
-            content_length = int(self.headers['Content-Length'])
-            post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
+            # Parse request body
+            if hasattr(request, 'body'):
+                data = json.loads(request.body)
+            else:
+                data = request.json if hasattr(request, 'json') else {}
             
             message = data.get('message', 'Hello')
             
@@ -112,7 +118,14 @@ This analysis incorporates data from:
                 "source": "Deep Research AI - Vercel Deployment"
             }
             
-            self.wfile.write(json.dumps(response_data).encode())
+            return {
+                'statusCode': 200,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps(response_data)
+            }
             
         except Exception as e:
             error_response = {
@@ -120,4 +133,25 @@ This analysis incorporates data from:
                 "error": f"Server error: {str(e)}",
                 "timestamp": int(time.time())
             }
-            self.wfile.write(json.dumps(error_response).encode()) 
+            return {
+                'statusCode': 500,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps(error_response)
+            }
+    
+    # Handle unsupported methods
+    return {
+        'statusCode': 405,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        },
+        'body': json.dumps({
+            "status": "error",
+            "error": f"Method {request.method} not allowed",
+            "timestamp": int(time.time())
+        })
+    } 

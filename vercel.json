@@ -1,8 +1,6 @@
 {
-  "buildCommand": "cd frontend && npm run build",
-  "outputDirectory": "frontend/.next",
-  "installCommand": "cd frontend && npm install",
   "framework": "nextjs",
+  "rootDirectory": "frontend",
   "env": {
     "NEXT_PUBLIC_SUPABASE_URL": "https://pmschnwcszmwaljxzmgr.supabase.co",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY": "placeholder-key",

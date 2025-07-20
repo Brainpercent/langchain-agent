@@ -5,23 +5,11 @@
       "use": "@vercel/next"
     },
     {
-      "src": "api/chat.py",
+      "src": "api/**/*.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
-    {
-      "src": "/api/chat",
-      "dest": "/api/chat"
-    },
-    {
-      "src": "/api/v1/chat",
-      "dest": "/api/chat"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
     {
       "src": "/(.*)",
       "dest": "frontend/$1"

@@ -1,14 +1,33 @@
 {
+  "functions": {
+    "api/chat.py": {
+      "runtime": "python3.9"
+    }
+  },
   "builds": [
     {
       "src": "frontend/package.json",
       "use": "@vercel/next"
+    },
+    {
+      "src": "api/chat.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "frontend/$1"
     }
-  ]
+  ],
+  "env": {
+    "OPENAI_API_KEY": "@openai_api_key",
+    "TAVILY_API_KEY": "@tavily_api_key",
+    "LANGCHAIN_API_KEY": "@langchain_api_key",
+    "ANTHROPIC_API_KEY": "@anthropic_api_key"
+  }
 } 

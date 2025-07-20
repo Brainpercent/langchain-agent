@@ -4,6 +4,7 @@ import os
 import time
 import hashlib
 import hmac
+import requests
 from urllib.parse import parse_qs
 import asyncio
 import aiohttp
@@ -29,22 +30,34 @@ class handler(BaseHTTPRequestHandler):
                 self.send_error_response("Invalid JSON format", 400)
                 return
 
-            # Authenticate request
-            api_key = self.headers.get('X-API-Key') or self.headers.get('Authorization', '').replace('Bearer ', '')
-            if not self.validate_api_key(api_key):
-                self.send_error_response("Invalid or missing API key", 401)
+            # Get authorization token from header
+            auth_header = self.headers.get('Authorization', '')
+            access_token = auth_header.replace('Bearer ', '') if auth_header.startswith('Bearer ') else None
+            
+            # For web platform, we expect a Supabase JWT token
+            platform = data.get('platform', 'webhook')
+            if platform == 'web' and not access_token:
+                self.send_error_response("Authorization required for web platform", 401)
                 return
+            
+            # For other platforms, validate API key
+            if platform != 'web':
+                api_key = self.headers.get('X-API-Key') or access_token
+                if not self.validate_api_key(api_key):
+                    self.send_error_response("Invalid or missing API key", 401)
+                    return
 
-            # Rate limiting check
-            if not self.check_rate_limit(api_key):
-                self.send_error_response("Rate limit exceeded", 429)
-                return
+                # Rate limiting check
+                if not self.check_rate_limit(api_key):
+                    self.send_error_response("Rate limit exceeded", 429)
+                    return
 
             # Process the chat request
-            response = self.process_chat_request(data)
+            response = self.process_chat_request(data, access_token)
             
             # Log usage
-            self.log_usage(api_key, data.get('platform', 'unknown'))
+            user_id = data.get('user_id', 'unknown')
+            self.log_usage(user_id, data.get('platform', 'unknown'))
             
             # Send response
             self.wfile.write(json.dumps(response).encode('utf-8'))
@@ -82,7 +95,7 @@ class handler(BaseHTTPRequestHandler):
         # In production: implement per-key rate limiting
         return True
 
-    def process_chat_request(self, data):
+    def process_chat_request(self, data, access_token=None):
         """Process the chat request and call LangGraph API"""
         start_time = time.time()
         
@@ -91,13 +104,14 @@ class handler(BaseHTTPRequestHandler):
         platform = data.get('platform', 'webhook')
         user_id = data.get('user_id', 'anonymous')
         channel_id = data.get('channel_id', '')
+        history = data.get('history', [])
         
         if not message:
             raise ValueError("Message is required")
 
         try:
-            # Call LangGraph API
-            research_response = self.call_langgraph_api(message)
+            # Call LangGraph API with proper authentication
+            research_response = self.call_langgraph_api(message, history, access_token)
             
             # Format response based on platform
             formatted_response = self.format_response_for_platform(
@@ -126,15 +140,84 @@ class handler(BaseHTTPRequestHandler):
                 "processing_time": time.time() - start_time
             }
 
-    def call_langgraph_api(self, message):
+    def call_langgraph_api(self, message, history=None, access_token=None):
         """Call the LangGraph API for research"""
-        # This would be async in production, simplified for serverless
-        
-        # Mock response for demo - replace with actual LangGraph call
-        langgraph_url = os.environ.get('LANGGRAPH_API_URL', 'http://localhost:2024')
-        assistant_id = os.environ.get('ASSISTANT_ID', 'research-assistant')
-        
-        # For demo, return formatted research response
+        try:
+            # Get LangGraph configuration from environment
+            langgraph_url = os.environ.get('LANGGRAPH_API_URL', 'http://localhost:2024')
+            
+            # Prepare conversation history
+            messages = []
+            if history:
+                messages.extend(history)
+            messages.append({
+                "role": "user",
+                "content": message
+            })
+            
+            # Prepare the request to LangGraph
+            thread_id = f"thread_{int(time.time())}_{hashlib.md5(message.encode()).hexdigest()[:8]}"
+            
+            request_body = {
+                "input": {
+                    "messages": messages
+                },
+                "config": {
+                    "configurable": {
+                        "thread_id": thread_id
+                    }
+                },
+                "stream": False  # We'll get the full response and return it
+            }
+            
+            headers = {
+                'Content-Type': 'application/json'
+            }
+            
+            # Add authorization if token is provided (for authenticated users)
+            if access_token:
+                headers['Authorization'] = f'Bearer {access_token}'
+            
+            print(f"Calling LangGraph API at {langgraph_url}/runs/invoke")
+            print(f"Using authorization: {'Yes' if access_token else 'No'}")
+            
+            # Make request to LangGraph
+            import requests
+            response = requests.post(
+                f"{langgraph_url}/runs/invoke",
+                json=request_body,
+                headers=headers,
+                timeout=120  # Increased timeout for research tasks
+            )
+            
+            print(f"LangGraph response status: {response.status_code}")
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Extract the AI response from LangGraph result
+                if 'output' in result and 'messages' in result['output']:
+                    messages = result['output']['messages']
+                    if messages and len(messages) > 0:
+                        last_message = messages[-1]
+                        if 'content' in last_message:
+                            return last_message['content']
+                
+                # Fallback: return the whole output as string
+                return str(result.get('output', 'No response from LangGraph'))
+            
+            else:
+                print(f"LangGraph API error: {response.status_code} - {response.text}")
+                # Return demo response as fallback
+                return self.get_demo_response(message)
+                
+        except Exception as e:
+            print(f"Error calling LangGraph API: {str(e)}")
+            # Return demo response as fallback
+            return self.get_demo_response(message)
+    
+    def get_demo_response(self, message):
+        """Generate a demo response when LangGraph is not available"""
         return f"""# Research Results for: "{message}"
 
 Based on my analysis, here are the key findings:
@@ -144,7 +227,7 @@ This is a comprehensive research response that would normally come from the Lang
 
 ## Key Points
 • **Point 1**: Detailed information about the research topic
-• **Point 2**: Additional insights and analysis
+• **Point 2**: Additional insights and analysis  
 • **Point 3**: Relevant trends and patterns
 
 ## Sources
@@ -155,7 +238,10 @@ This is a comprehensive research response that would normally come from the Lang
 ## Conclusion
 The research indicates significant developments in this area, with implications for future trends and applications.
 
-*Research completed in {time.strftime('%Y-%m-%d %H:%M:%S')}*"""
+*Research completed in {time.strftime('%Y-%m-%d %H:%M:%S')}*
+
+---
+*Note: This is a demo response. Configure LANGGRAPH_API_URL environment variable to connect to your LangGraph server.*"""
 
     def format_response_for_platform(self, response, platform):
         """Format response based on target platform"""
@@ -182,10 +268,10 @@ The research indicates significant developments in this area, with implications 
             # Default webhook format (full markdown)
             return response
 
-    def log_usage(self, api_key, platform):
+    def log_usage(self, user_id, platform):
         """Log API usage for analytics"""
         # In production, log to database
-        print(f"API Usage: {api_key[:10]}... on {platform} at {time.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"API Usage: User {user_id} on {platform} at {time.strftime('%Y-%m-%d %H:%M:%S')}")
 
     def send_error_response(self, message, status_code):
         """Send error response"""

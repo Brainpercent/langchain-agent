@@ -62,7 +62,7 @@ export function ChatContainer() {
 
       // Send message to LangGraph API
       console.log('🚀 Sending message to LangGraph API:', content)
-      const response = await langGraphAPI.sendMessage(content, conversationHistory)
+      const response = await langGraphAPI.sendMessage(content, conversationHistory, user?.access_token)
       console.log('✅ Got response from API, starting stream...')
       
       // Stream the response

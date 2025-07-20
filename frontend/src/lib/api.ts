@@ -14,51 +14,66 @@ export class LangGraphAPI {
   private assistantId: string
 
   constructor() {
-    this.baseUrl = process.env.NEXT_PUBLIC_LANGGRAPH_API_URL || 'http://localhost:2024'
-    this.assistantId = process.env.NEXT_PUBLIC_ASSISTANT_ID || 'default'
+    // Use Vercel API endpoint instead of local LangGraph
+    this.baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL 
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+      : (process.env.NODE_ENV === 'production' 
+          ? window.location.origin 
+          : 'http://localhost:3000')
+    this.assistantId = process.env.NEXT_PUBLIC_ASSISTANT_ID || 'deep_researcher'
   }
 
-  async sendMessage(userMessage: string, conversationHistory: LangGraphMessage[] = []): Promise<Response> {
-    const messages = [
-      ...conversationHistory,
-      { role: 'user' as const, content: userMessage }
-    ]
-
-    const threadId = `thread_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
-
-    const requestBody = {
-      input: {
-        messages: messages
-      },
-      config: {
-        configurable: {
-          thread_id: threadId
-        }
-      },
-      stream: true
-    }
-
-    console.log('🚀 Sending request to LangGraph API...')
-    console.log('URL:', `${this.baseUrl}/runs/stream`)
-    console.log('Request body:', JSON.stringify(requestBody, null, 2))
+  async sendMessage(userMessage: string, conversationHistory: LangGraphMessage[] = [], accessToken?: string): Promise<Response> {
+    console.log('🚀 Sending request to Vercel API...')
+    console.log('Base URL:', this.baseUrl)
+    console.log('Message:', userMessage)
+    console.log('Using authorization:', accessToken ? 'Yes (token provided)' : 'No (missing token)')
 
     try {
-      const response = await fetch(`${this.baseUrl}/runs/stream`, {
+      // Prepare headers
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      }
+
+      // Add authorization header if token is provided
+      if (accessToken) {
+        headers['Authorization'] = `Bearer ${accessToken}`
+      }
+
+      // Prepare request body for Vercel API
+      const requestBody = {
+        message: userMessage,
+        platform: 'web',
+        user_id: 'web_user',
+        channel_id: 'web_chat',
+        history: conversationHistory
+      }
+
+      console.log('Request body:', JSON.stringify(requestBody, null, 2))
+
+      const response = await fetch(`${this.baseUrl}/api/v1/chat`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'text/event-stream',
-        },
+        headers,
         body: JSON.stringify(requestBody)
       })
 
       if (!response.ok) {
         const errorText = await response.text()
         console.error('❌ API request failed:', response.status, errorText)
-        throw new Error(`API request failed: ${response.status} ${response.statusText}`)
+        
+        // Try to provide helpful error messages
+        if (response.status === 403) {
+          throw new Error('Access forbidden. Please make sure you are logged in and your session is valid.')
+        } else if (response.status === 401) {
+          throw new Error('Authentication failed. Please log in again.')
+        } else if (response.status === 404) {
+          throw new Error('API endpoint not found. Please check your deployment configuration.')
+        } else {
+          throw new Error(`API request failed: ${response.status} ${response.statusText}`)
+        }
       }
 
-      console.log('✅ API request successful, response ready for streaming')
+      console.log('✅ API request successful')
       return response
     } catch (error) {
       console.error('❌ Network error:', error)
@@ -68,78 +83,42 @@ export class LangGraphAPI {
 
   async *streamResponse(response: Response): AsyncGenerator<string, void, unknown> {
     if (!response.body) {
-      throw new Error('No response body available for streaming')
+      throw new Error('No response body available')
     }
 
-    const reader = response.body.getReader()
-    const decoder = new TextDecoder()
-    let buffer = ''
-    let lastContent = ''
-
     try {
-      while (true) {
-        const { done, value } = await reader.read()
+      // Parse the JSON response from Vercel API
+      const data = await response.json()
+      
+      if (data.status === 'error') {
+        throw new Error(data.error || 'Unknown error from API')
+      }
+
+      // Simulate streaming by yielding the response gradually
+      const content = data.response || ''
+      console.log('📄 Received content from API:', content.length, 'characters')
+      
+      // Split content into chunks and stream them
+      const words = content.split(' ')
+      let currentContent = ''
+      
+      for (let i = 0; i < words.length; i++) {
+        currentContent += (i > 0 ? ' ' : '') + words[i]
         
-        if (done) {
-          console.log('🏁 Stream completed')
-          break
-        }
-
-        buffer += decoder.decode(value, { stream: true })
-        const lines = buffer.split('\n')
-        buffer = lines.pop() || ''
-
-        for (const line of lines) {
-          const trimmedLine = line.trim()
+        // Yield chunks of approximately 5-10 words for smooth streaming effect
+        if (i % 7 === 0 || i === words.length - 1) {
+          const chunk = i === 0 ? currentContent : ' ' + words.slice(Math.max(0, i - 6), i + 1).join(' ')
+          yield chunk
           
-          if (trimmedLine === '') continue
-          if (trimmedLine === 'event: end') {
-            console.log('📝 Received end event')
-            return
-          }
-          if (!trimmedLine.startsWith('data: ')) continue
-
-          try {
-            const dataStr = trimmedLine.substring(6)
-            if (dataStr === '[DONE]') {
-              console.log('📝 Received [DONE] marker')
-              return
-            }
-
-            const data = JSON.parse(dataStr)
-            console.log('📦 Parsed SSE data:', data)
-
-            if (data.event === 'on_chain_end' && data.name === 'LangGraph') {
-              const outputData = data.data?.output
-              if (outputData?.messages && Array.isArray(outputData.messages)) {
-                const lastMessage = outputData.messages[outputData.messages.length - 1]
-                if (lastMessage?.content && typeof lastMessage.content === 'string') {
-                  const newContent = lastMessage.content
-
-                  if (newContent !== lastContent) {
-                    if (lastContent && newContent.startsWith(lastContent)) {
-                      const incrementalContent = newContent.substring(lastContent.length)
-                      if (incrementalContent) {
-                        console.log('📄 Yielding incremental content:', incrementalContent)
-                        yield incrementalContent
-                      }
-                    } else {
-                      console.log('🔄 Content replaced, yielding replacement marker')
-                      yield `__REPLACE__${newContent}`
-                    }
-                    lastContent = newContent
-                  }
-                }
-              }
-            }
-          } catch (parseError) {
-            console.warn('⚠️ Failed to parse SSE data:', parseError, 'Raw line:', trimmedLine)
-            continue
-          }
+          // Small delay to simulate streaming
+          await new Promise(resolve => setTimeout(resolve, 50))
         }
       }
-    } finally {
-      reader.releaseLock()
+      
+      console.log('🏁 Streaming completed')
+    } catch (error) {
+      console.error('❌ Error processing response:', error)
+      throw error
     }
   }
 }

@@ -35,6 +35,9 @@ export function ChatContainer() {
       isLoading: true
     }))
 
+    // Create assistant message ID outside try-catch for proper scope
+    const assistantMessageId = `assistant-${Date.now()}`
+
     try {
       // Convert chat history to LangGraph format
       const conversationHistory: LangGraphMessage[] = chatState.messages.map(msg => ({
@@ -43,7 +46,6 @@ export function ChatContainer() {
       }))
 
       // Create assistant message for streaming
-      const assistantMessageId = `assistant-${Date.now()}`
       const assistantMessage: Message = {
         id: assistantMessageId,
         content: '',
